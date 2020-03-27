@@ -24,8 +24,8 @@ function App() {
     const result = (total * (rat / 100)) / peop;
     const eachResult = result / peop;
 
-    setOutput(result);
-    setEachOutput(eachResult);
+    setOutput(result.toFixed(2));
+    setEachOutput(eachResult.toFixed(2));
   };
 
   const totalBilHandling = value => {
