@@ -6,6 +6,8 @@ import "./App.css";
 const { Option } = Select;
 
 function App() {
+  const [display, setDisplay] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [eachOutput, setEachOutput] = useState(0);
   const [output, setOutput] = useState(0);
   const [totalBil, setTotalBil] = useState(0);
@@ -16,16 +18,38 @@ function App() {
     setRating(value);
   }
 
+  const alertBox = () => {
+    alert("Please input all the field!");
+    setOutput(0);
+    setEachOutput(0);
+    setDisplay(true)
+  };
+
   const calculatingHandler = () => {
     const total = Number(totalBil);
     const rat = Number(rating);
     const peop = Number(people);
 
-    const result = (total * (rat / 100)) / peop;
-    const eachResult = result / peop;
+    setLoading(true);
 
-    setOutput(result.toFixed(2));
-    setEachOutput(eachResult.toFixed(2));
+    setTimeout(() => {
+      setLoading(false);
+      setDisplay(false);
+
+      if (total === 0 || rat === 0 || peop === 0) {
+        alertBox();
+      } else {
+        const result = (total * (rat / 100)) / peop;
+        const eachResult = result / peop;
+
+        setOutput(result.toFixed(2));
+        setEachOutput(eachResult.toFixed(2));
+
+        setTotalBil(0);
+        setRating(0);
+        setPeople(0);
+      }
+    }, 1000);
   };
 
   const totalBilHandling = value => {
@@ -36,12 +60,13 @@ function App() {
     setPeople(value);
   };
 
-  return (
-    <div className="App">
-      <section className="calculating-area">
-        <header className="header">
-          <h1>Tip calculator</h1>
-        </header>
+  const displayCondition = (
+    <div>
+      {display ? (
+        <div className="display">
+          <h1>Welcome to my application</h1>
+        </div>
+      ) : (
         <div className="display">
           <div className="total-tip">
             <h1>TOTAL TIP AMOUNT:</h1>
@@ -52,6 +77,23 @@ function App() {
             <h1 className="dolar">$ {eachOutput}</h1>
           </div>
         </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="App">
+      <section className="calculating-area">
+        <header className="header">
+          <h1>Tip calculator</h1>
+        </header>
+        {loading ? (
+          <div className="display">
+            <Spin />
+          </div>
+        ) : (
+          displayCondition
+        )}
         <hr />
         <div className="calculating">
           <div className="total">
