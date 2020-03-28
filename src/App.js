@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "antd/dist/antd.css";
-import { InputNumber, Select, Button, Spin } from "antd";
+import { InputNumber, Select, Button, Spin, notification, Divider } from "antd";
 import "./App.css";
+import { RadiusUpleftOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -14,16 +15,22 @@ function App() {
   const [rating, setRating] = useState(0);
   const [people, setPeople] = useState(0);
 
+  const openNotification = placement => {
+    notification.info({
+      message: `Tip Calculator`,
+      description:
+        "Please input all the fields",
+      placement
+    });
+    setOutput(0);
+    setEachOutput(0);
+    setDisplay(true);
+  };
+
   function handleChange(value) {
     setRating(value);
   }
 
-  const alertBox = () => {
-    alert("Please input all the field!");
-    setOutput(0);
-    setEachOutput(0);
-    setDisplay(true)
-  };
 
   const calculatingHandler = () => {
     const total = Number(totalBil);
@@ -37,7 +44,7 @@ function App() {
       setDisplay(false);
 
       if (total === 0 || rat === 0 || peop === 0) {
-        alertBox();
+        openNotification('topLeft')
       } else {
         const result = (total * (rat / 100)) / peop;
         const eachResult = result / peop;
